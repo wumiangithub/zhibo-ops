@@ -12,12 +12,5 @@ if ($LASTEXITCODE -ne 0) { throw "admin-web build failed" }
 scp -r .\dist\* "${HostName}:/var/www/zhibo/admin-web/"
 Pop-Location
 
-Write-Host "== Build + upload live-web ==" -ForegroundColor Cyan
-Push-Location (Join-Path $Frontend "live-web")
-npm run build:test
-if ($LASTEXITCODE -ne 0) { throw "live-web build failed" }
-scp -r .\dist\* "${HostName}:/var/www/zhibo/live-web/"
-Pop-Location
-
-Write-Host "== Frontend done ==" -ForegroundColor Green
-Write-Host "http://14.103.210.83:5173  |  http://14.103.210.83:5174"
+Write-Host "== admin-web done ==" -ForegroundColor Green
+Write-Host "http://14.103.210.83:5173"

@@ -1,4 +1,4 @@
-﻿# test 环境
+# test 环境
 
 - SSH：`ssh ubuntu@14.103.210.83`（当前密码登录；有密钥后再关密码）
 - 系统：Ubuntu 26.04 64 位（火山云）
@@ -33,12 +33,8 @@ whoami
 ```bash
 sudo timedatectl set-timezone Asia/Shanghai
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y git curl ufw build-essential nginx
-sudo ufw allow OpenSSH
-sudo ufw allow 5173/tcp
-sudo ufw allow 5174/tcp
-sudo ufw --force enable
-sudo ufw status
+sudo apt install -y git curl build-essential nginx
+# 不要启用 ufw；端口放行只走火山云安全组（D103）
 ```
 
 说明：
@@ -46,9 +42,8 @@ sudo ufw status
 - 时区：日志和以后证书时间对齐上海
 - `git`/`curl`：拉代码、下载用
 - `nginx`：对外提供两个静态站
-- `ufw`：只放行 SSH + 5173/5174（HTTP 80/443 等有域名再开）
-
-**同时在火山云安全组放行 5173、5174**，否则本机 ufw 开了外网仍进不来。
+- 端口放行只走火山云安全组（D103），**不要启用 ufw**。
+- 安全组需放行 5173、5174（以及后端需要的端口，如 80、8081）。
 
 ### 3. 站点目录
 
@@ -76,12 +71,18 @@ sudo nginx -t && sudo systemctl reload nginx
 
 ## 与后端共存（重要）
 
+## 防火墙约定
+
+- **不要自行开启 `ufw`**。对外访问以火山云安全组为准。
+- 本机若曾启用过 `ufw`，应 `sudo ufw disable`，避免误挡后端端口（如 80、8081）。
+- 需要放行端口时，优先改安全组，而不是在服务器上开 ufw。
+
 test 机上**已有后端同学部署的 Java 服务**。本仓只增加前端静态站与对应 Nginx server：
 
 - 不要随意 `systemctl stop/restart` 不明服务、不要占用后端已用端口
-- `ufw` / 安全组只**追加** 5173/5174，不要重置成「只开这几个」而误伤后端已放行端口
+- 安全组只**追加**需要的端口；不要启用 ufw
 - Nginx：用独立 `server` 听 5173/5174；改配置前先 `sudo nginx -t`，reload 前尽量跟后端确认没有共用冲突
-- 前端同源前缀写在 `.env.test` 的 `VITE_APP_BASE_API`（admin `/live-admin`，live `/live-client`）。Nginx 把这两个前缀转到本机 `127.0.0.1:8080`、`127.0.0.1:8081`
+- 前端同源前缀写在 `.env.test` 的 `VITE_APP_BASE_API`（admin `/live-admin`，live `/live-client`）。Nginx 把这两个前缀转到本机 `127.0.0.1:80`（/live-admin）、`127.0.0.1:8081`（/live-client）
 
 ## 本轮先不做
 

@@ -1,4 +1,4 @@
-﻿# 接手必读（运维 agent）
+# 接手必读（运维 agent）
 
 本目录是运维工作区。读者是 **运维（Grok，D102）**。
 
@@ -28,3 +28,7 @@ Grok bot **打开父目录** `D:\ai-project\zhibo`（`zhibo-ops` 和各子仓都
 ## 工作区安全（D64）
 
 禁止用 `git checkout HEAD --` / `git restore` / `git reset --hard` / `git clean -fd` 覆盖或删除未提交 WIP。细则：`../zhibo-shared/docs/工作区与Git安全.md`。
+
+## 防火墙
+
+不要自行开启 `ufw`；端口放行走云安全组。曾启用过则 `ufw disable`，避免挡后端端口。
