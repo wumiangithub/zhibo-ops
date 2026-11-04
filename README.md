@@ -8,4 +8,4 @@
 - uat：`ubuntu@14.103.46.159`
 - prod：机器待定
 
-本目录是否单独 git 仓，后续再定；先作为父目录下的运维工作区。
+本目录是独立 git 仓，默认分支 `master`，远程 `git@github.com:wumiangithub/zhibo-ops.git`。父目录不要 `git init`。

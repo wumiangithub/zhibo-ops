@@ -21,7 +21,7 @@ Grok bot **打开父目录** `D:\ai-project\zhibo`（`zhibo-ops` 和各子仓都
 
 前缀固定 `[ops-grok]`。须用户明确要求才 `git commit` / `git push`。
 
-`zhibo-ops` 是否单独 git 仓后续再定（见 README）。改到已有子仓（`zhibo-backend` / `zhibo-frontend` / `zhibo-wxmini` / `zhibo-shared`）的运维配置，进那个子仓提交，前缀仍是 `[ops-grok]`。
+`zhibo-ops` 是独立 git 仓（默认分支 `master`）。改本目录就在本仓提交。改到其他子仓（`zhibo-backend` / `zhibo-frontend` / `zhibo-wxmini` / `zhibo-shared`）的运维配置，进那个子仓提交，前缀仍是 `[ops-grok]`。推远程：`git push origin master`。
 
 父目录不要 `git init`。
 
