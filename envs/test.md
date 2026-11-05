@@ -82,7 +82,7 @@ test 机上**已有后端同学部署的 Java 服务**。本仓只增加前端�
 - 不要随意 `systemctl stop/restart` 不明服务、不要占用后端已用端口
 - 安全组只**追加**需要的端口；不要启用 ufw
 - Nginx：用独立 `server` 听 5173/5174；改配置前先 `sudo nginx -t`，reload 前尽量跟后端确认没有共用冲突
-- 前端同源前缀写在 `.env.test` 的 `VITE_APP_BASE_API`（admin `/live-admin`，live `/live-client`）。Nginx 把这两个前缀转到本机 `127.0.0.1:80`（/live-admin）、`127.0.0.1:8081`（/live-client）
+- 前端同源前缀写在 `.env.test` 的 `VITE_APP_BASE_API`（admin `/live-admin`，live `/live-client`）。Nginx 把这两个前缀转到本机 `127.0.0.1:8080`（/live-admin）、`127.0.0.1:8081`（/live-client）
 
 ## 本轮先不做
 
@@ -90,3 +90,14 @@ test 机上**已有后端同学部署的 Java 服务**。本仓只增加前端�
 - HTTPS / 域名
 - 后端 Java 发布
 - 网页一键发布流水线（以后再做）
+
+## 域名（80 分流）
+
+DNS A 均指向 `14.103.210.83`：
+
+- `qkzb-admin-test.caijisong.com.cn` → Nginx 静态 admin-web，`/live-admin` → `127.0.0.1:8080`
+- `qkzb-live-test.caijisong.com.cn` → Nginx 静态 live-web，`/live-client` → `127.0.0.1:8081`
+- `qkzb-admin-server-test.caijisong.com.cn` → `127.0.0.1:8080`
+- `qkzb-client-server-test.caijisong.com.cn` → `127.0.0.1:8081`
+
+Nginx 占用 **80**；Java 只听 **8080/8081**，不要再占 80。安全组放行 **80**。
