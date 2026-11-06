@@ -83,6 +83,7 @@ test 机上**已有后端同学部署的 Java 服务**。本仓只增加前端�
 - 安全组只**追加**需要的端口；不要启用 ufw
 - Nginx：用独立 `server` 听 5173/5174；改配置前先 `sudo nginx -t`，reload 前尽量跟后端确认没有共用冲突
 - 前端同源前缀写在 `.env.test` 的 `VITE_APP_BASE_API`（admin `/live-admin`，live `/live-client`）。Nginx 把这两个前缀转到本机 `127.0.0.1:8080`（/live-admin）、`127.0.0.1:8081`（/live-client）
+- 管理端微信扫码回调：开放平台回调域 / `redirect_uri` 为 `https://wx.qktz.com.cn/live-admin/api/v1/auth/wechat/callback`（**本方机器** `wx.qktz.com.cn`，公网 DNS ~`111.229.79.51`，承接微信浏览器跳转；前后端 env 须同值，只写该对外 HTTPS 地址，勿写上游；前端 `VITE_WECHAT_REDIRECT_URI`，后端 `wechat.redirect-uri` / `WECHAT_OPEN_REDIRECT_URI`）。该机 Nginx 再反代到测试 admin：`http://qkzb-admin-server-test.caijisong.com.cn/live-admin/api/v1/auth/wechat/callback`（即本机 `14.103.210.83:8080`）；路径是 `/live-admin`，不是旧 `/qkzb-admin-test`。
 
 ## 本轮先不做
 
