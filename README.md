@@ -1,4 +1,4 @@
-﻿# zhibo-ops
+# zhibo-ops
 
 运维相关：环境说明、Nginx、发布/回退脚本、流水线工具等放这里。维护者是 **运维（Grok，D102）**，开工先看 [AGENTS.md](./AGENTS.md)。子仓里已有的 nginx / 发布 / 环境配置可以由这个窗口改；不写业务代码。
 
@@ -8,7 +8,8 @@
 |------|------|
 | `envs/` | 各环境机器、端口、初始化步骤 |
 | `nginx/` | Nginx 配置草案（按环境） |
-| `scripts/` | 发布 / 回退脚本（待写） |
+| `scripts/` | 发布 / 回退脚本 |
+| `local-publish/` | 本机一键发布控制台（React + Node，调 scripts/test） |
 
 ## 环境速查
 
