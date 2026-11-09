@@ -32,13 +32,13 @@ npm run install:all
 npm run dev
 ```
 
-开发模式请打开前端：**http://localhost:5179**（Vite 已把 /api 代理到 3789）。
+开发模式请打开前端：**http://localhost:6688**（Vite 已把 /api 代理到 3789）。
 
 生产式本地（先 build）：**http://localhost:3789**
 
 默认账号：`ops` / `ops123`（可在 `.env` 修改）
 
-- 开发模式：Vite 前端（5179）+ Express API（3789），Vite 把 `/api` 代理到 Express；根路径 3789 也可直接打开（生产式托管需先 build）
+- 开发模式：Vite 前端（6688）+ Express API（3789），Vite 把 `/api` 代理到 Express；根路径 3789 也可直接打开（生产式托管需先 build）
 - 生产式本地：`npm run build` 后 `npm start`，Express 托管 `web/dist` 并提供 API
 
 ## 环境变量

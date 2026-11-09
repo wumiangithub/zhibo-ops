@@ -45,7 +45,7 @@ app.use(
 
 function requireAuth(req, res, next) {
   if (req.session && req.session.user) return next();
-  return res.status(401).json({ ok: false, error: '未登录' });
+  return res.status(401).json({ ok: false, error: '\u672a\u767b\u5f55' });
 }
 
 app.get('/api/health', (_req, res) => {
@@ -69,7 +69,7 @@ app.post('/api/login', (req, res) => {
     req.session.user = { username };
     return res.json({ ok: true, user: { username } });
   }
-  return res.status(401).json({ ok: false, error: '账号或密码错误' });
+  return res.status(401).json({ ok: false, error: '\u8d26\u53f7\u6216\u5bc6\u7801\u9519\u8bef' });
 });
 
 app.post('/api/logout', (req, res) => {

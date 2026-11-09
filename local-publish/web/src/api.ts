@@ -1,4 +1,11 @@
 export type JobStatus = 'idle' | 'running' | 'success' | 'failed';
+export type TargetStatus = 'idle' | 'pending' | 'running' | 'success' | 'failed';
+
+export interface TargetState {
+  status: TargetStatus;
+  exitCode: number | null;
+  message: string;
+}
 
 export interface JobState {
   ok?: boolean;
@@ -8,7 +15,15 @@ export interface JobState {
   startedAt: string | null;
   finishedAt: string | null;
   currentTargets: string[];
+  currentTarget?: string | null;
+  targets?: Record<string, TargetState>;
   logCount?: number;
+}
+
+export interface LogEntry {
+  t: number;
+  line: string;
+  target?: string;
 }
 
 async function json<T>(url: string, init?: RequestInit): Promise<T> {
@@ -19,7 +34,7 @@ async function json<T>(url: string, init?: RequestInit): Promise<T> {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const err = new Error((data && data.error) || res.statusText || '请求失败');
+    const err = new Error((data && data.error) || res.statusText || '\u8bf7\u6c42\u5931\u8d25');
     (err as Error & { status?: number; code?: string }).status = res.status;
     (err as Error & { code?: string }).code = data.code;
     throw err;

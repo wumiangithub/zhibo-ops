@@ -131,6 +131,7 @@ h1 {
 }
 
 .status-pill.idle { background: #f3f4f6; color: #374151; }
+.status-pill.pending { background: #fef3c7; color: #92400e; }
 .status-pill.running { background: #dbeafe; color: #1d4ed8; }
 .status-pill.success { background: #dcfce7; color: #166534; }
 .status-pill.failed { background: #fee2e2; color: #991b1b; }
@@ -139,6 +140,79 @@ h1 {
   color: #6b7280;
   font-size: 0.85rem;
   margin-bottom: 12px;
+}
+
+.log-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.log-tab {
+  position: relative;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #4b5563;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.log-tab:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.log-tab.active {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.log-tab.running {
+  color: #1d4ed8;
+}
+
+.log-tab.st-success.active { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.log-tab.st-failed.active { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.log-tab.st-pending.active { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+
+.tab-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  vertical-align: middle;
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.tab-badge.st-pending { background: #fef3c7; color: #92400e; }
+.tab-badge.st-running { background: #dbeafe; color: #1d4ed8; }
+.tab-badge.st-success { background: #dcfce7; color: #166534; }
+.tab-badge.st-failed { background: #fee2e2; color: #991b1b; }
+
+.log-tab .tab-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+  vertical-align: middle;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
 
 .log-box {
