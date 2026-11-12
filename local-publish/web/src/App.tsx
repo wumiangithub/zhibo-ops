@@ -1,13 +1,15 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { api, JobState, JobStatus, LogEntry, TargetStatus } from './api';
 
-type Target = 'nginx' | 'admin-web' | 'live-web';
+type Target = 'nginx' | 'admin-web' | 'live-web' | 'admin-java' | 'live-java';
 type TabKey = 'all' | Target | string;
 
 const TARGET_OPTIONS: { key: Target; label: string }[] = [
   { key: 'nginx', label: 'nginx \u914d\u7f6e' },
   { key: 'admin-web', label: 'admin-web \u7ba1\u7406\u7aef' },
   { key: 'live-web', label: 'live-web \u89c2\u4f17\u7aef' },
+  { key: 'admin-java', label: 'admin-java \u7ba1\u7406\u7aef\u540e\u7aef' },
+  { key: 'live-java', label: 'live-java \u89c2\u4f17\u7aef\u540e\u7aef' },
 ];
 
 const TARGET_LABEL: Record<string, string> = {
@@ -15,6 +17,8 @@ const TARGET_LABEL: Record<string, string> = {
   nginx: 'nginx',
   'admin-web': 'admin-web',
   'live-web': 'live-web',
+  'admin-java': 'admin-java',
+  'live-java': 'live-java',
 };
 
 function statusLabel(s: JobStatus | TargetStatus | string) {
@@ -57,12 +61,14 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [user, setUser] = useState<string | null>(null);
   const [username, setUsername] = useState('ops');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('ops123');
   const [loginError, setLoginError] = useState('');
   const [selected, setSelected] = useState<Record<Target, boolean>>({
     nginx: false,
     'admin-web': false,
     'live-web': false,
+    'admin-java': false,
+    'live-java': false,
   });
   const [job, setJob] = useState<JobState>({
     status: 'idle',
@@ -81,13 +87,21 @@ export default function App() {
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let cancelled = false;
     api
       .me()
       .then((r) => {
+        if (cancelled) return;
         setUser(r.user?.username ?? null);
         setReady(true);
       })
-      .catch(() => setReady(true));
+      .catch(() => {
+        if (cancelled) return;
+        setReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -210,7 +224,6 @@ export default function App() {
     try {
       const r = await api.login(username, password);
       setUser(r.user.username);
-      setPassword('');
       setLogs([]);
       setActiveTab('all');
       setUserPickedTab(false);
@@ -266,7 +279,7 @@ export default function App() {
       <div className="app-shell">
         <div className="card">
           <h1>{'\u672c\u5730\u53d1\u5e03\u63a7\u5236\u53f0'}</h1>
-          <p className="sub">{'\u767b\u5f55\u540e\u53ef\u4e00\u952e\u89e6\u53d1 test \u73af\u5883\u524d\u7aef\u53d1\u5e03\u811a\u672c'}</p>
+          <p className="sub">{'\u767b\u5f55\u540e\u53ef\u4e00\u952e\u89e6\u53d1 test \u73af\u5883\u524d\u7aef\u4e0e Java \u53d1\u5e03\u811a\u672c'}</p>
           <form className="login-form" onSubmit={onLogin}>
             <label>
               {'\u8d26\u53f7'}

@@ -5,6 +5,7 @@ const session = require('express-session');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { DeployJobManager } = require('./job');
+const FileSessionStore = require('./file-session-store');
 
 const envPath = path.join(__dirname, '..', '..', '.env');
 dotenv.config({ path: envPath });
@@ -29,15 +30,18 @@ app.use(
   })
 );
 app.use(express.json());
+const SESSION_DIR = path.join(__dirname, '..', '..', '.sessions');
 app.use(
   session({
     name: 'lp.sid',
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new FileSessionStore({ dir: SESSION_DIR }),
     cookie: {
       httpOnly: true,
       sameSite: 'lax',
+      path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },
   })

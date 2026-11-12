@@ -7,9 +7,9 @@
 ## 功能
 
 - 简单登录（账号密码在 `.env`）
-- 勾选发布：admin-web / live-web / nginx
-- 「全部发布」→ `deploy-all-test.ps1`（nginx → admin → live）
-- 多选单项时按 nginx → admin → live 顺序依次执行对应 `.ps1`
+- 勾选发布：nginx / admin-web / live-web / admin-java / live-java（默认都不勾选）
+- 「全部发布」按顺序跑：nginx → admin-web → live-web → admin-java → live-java（各自独立脚本，控制台分 tab 看日志）
+- 多选单项时按 nginx → admin-web → live-web → admin-java → live-java 顺序依次执行对应 `.ps1`
 - SSE 实时日志
 - 同时只允许一个发布任务
 
@@ -20,8 +20,10 @@
 | 仅 nginx | `deploy-nginx-test.ps1` |
 | 仅 admin-web | `deploy-admin-web-test.ps1` |
 | 仅 live-web | `deploy-live-web-test.ps1` |
-| 全部发布 / 三项全选 | `deploy-all-test.ps1` |
-| 多选（非三项） | 按 nginx → admin → live 顺序跑选中的脚本 |
+| 仅 admin-java | `deploy-java-test.ps1 -Target admin`（本机 JDK 17 打包，测试机 Docker 听 127.0.0.1:9080） |
+| 仅 live-java | `deploy-java-test.ps1 -Target live`（本机 JDK 17 打包，测试机 Docker 听 127.0.0.1:9081） |
+| 全部发布 / 全选 | 依次跑 nginx、两个前端、两个 Java 脚本（不是再包一层 deploy-all-test） |
+| 多选（非全选） | 按 nginx → admin-web → live-web → admin-java → live-java 顺序跑选中的脚本 |
 
 ## 安装与启动
 

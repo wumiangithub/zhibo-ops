@@ -6,9 +6,16 @@ const SCRIPT_MAP = {
   nginx: 'deploy-nginx-test.ps1',
   'admin-web': 'deploy-admin-web-test.ps1',
   'live-web': 'deploy-live-web-test.ps1',
+  'admin-java': 'deploy-java-test.ps1',
+  'live-java': 'deploy-java-test.ps1',
 };
 
-const ORDER = ['nginx', 'admin-web', 'live-web'];
+const SCRIPT_ARGS = {
+  'admin-java': ['-Target', 'admin'],
+  'live-java': ['-Target', 'live'],
+};
+
+const ORDER = ['nginx', 'admin-web', 'live-web', 'admin-java', 'live-java'];
 
 function emptyTargetState() {
   return { status: 'idle', exitCode: null, message: '' };
@@ -63,7 +70,7 @@ class DeployJobManager extends EventEmitter {
   resolveScripts(targets) {
     const unique = [...new Set(targets)];
     // Expand "all" (or all three checked) into individual scripts so each gets its own log target/tab.
-    if (unique.includes('all') || (ORDER.every((k) => unique.includes(k)) && unique.length >= 3)) {
+    if (unique.includes('all') || (ORDER.every((k) => unique.includes(k)) && unique.length >= ORDER.length)) {
       return ORDER.map((k) => ({ key: k, file: SCRIPT_MAP[k] }));
     }
     return ORDER.filter((k) => unique.includes(k)).map((k) => ({ key: k, file: SCRIPT_MAP[k] }));
@@ -137,10 +144,22 @@ class DeployJobManager extends EventEmitter {
     this.emit('status', this.getState());
     this.appendLog('-- \u6267\u884c: ' + item.file + ' --', item.key);
 
+    const extraArgs = (SCRIPT_ARGS[item.key] || [])
+      .map((a) => {
+        const s = String(a);
+        if (!/^[A-Za-z0-9._:-]+$/.test(s)) {
+          throw new Error("unsafe script arg");
+        }
+        return s;
+      })
+      .join(" ");
     const psCommand =
       "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; " +
       "$OutputEncoding = [System.Text.Encoding]::UTF8; " +
-      "& '" + scriptPath.replace(/'/g, "''") + "'";
+      "& '" +
+      scriptPath.replace(/'/g, "''") +
+      "'" +
+      (extraArgs ? " " + extraArgs : "");
 
     const child = spawn(
       'powershell.exe',
@@ -223,4 +242,4 @@ class DeployJobManager extends EventEmitter {
   }
 }
 
-module.exports = { DeployJobManager, SCRIPT_MAP, ORDER };
+module.exports = { DeployJobManager, SCRIPT_MAP, SCRIPT_ARGS, ORDER };
