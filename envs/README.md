@@ -10,4 +10,6 @@
 前端构建：`admin-web` / `live-web` 使用 `npm run build:test`（mode=test）。  
 对外端口由本仓 Nginx / 安全组决定，**不会**写进 Vite 构建产物。
 
+**Spring profile（强制）**：测试 / 预发 / 生产的 Java 必须分别以 `--spring.profiles.active=test|uat|prod` 启动，禁止沿用默认 `local`。详见 `../../zhibo-shared/docs/Spring环境与启动.md`。
+
 细节见各环境文件：`test.md`（已写）、`uat.md` / `prod.md`（占位）。

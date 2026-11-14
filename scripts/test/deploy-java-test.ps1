@@ -25,6 +25,20 @@ $WantLive = ($Target -eq "all" -or $Target -eq "live")
 Write-Host ("== Build jars (JDK 17, target={0}) ==" -f $Target) -ForegroundColor Cyan
 $env:JAVA_HOME = $JavaHome
 $env:Path = "$JavaHome\bin;" + $env:Path
+
+# Windows: local java -jar holds a lock on target/*.jar; spring-boot:repackage then fails to rename to .jar.original
+$jarLockPatterns = @()
+if ($WantAdmin) { $jarLockPatterns += "admin-service-1\.0\.0\.jar" }
+if ($WantLive) { $jarLockPatterns += "live-service-1\.0\.0\.jar" }
+$jarLockRegex = ($jarLockPatterns -join "|")
+Get-CimInstance Win32_Process -Filter "Name='java.exe'" -ErrorAction SilentlyContinue |
+  Where-Object { $_.CommandLine -and ($_.CommandLine -match $jarLockRegex) } |
+  ForEach-Object {
+    Write-Host ("Stopping local process locking jar: PID={0}" -f $_.ProcessId) -ForegroundColor Yellow
+    Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+  }
+Start-Sleep -Seconds 1
+
 $modules = @()
 if ($WantAdmin) { $modules += "admin-service" }
 if ($WantLive) { $modules += "live-service" }

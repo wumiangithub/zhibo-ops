@@ -1,5 +1,7 @@
 # test 环境
 
+**Spring profile（强制）**：本环境拉起 `admin-service` / `live-service` 时必须带 `--spring.profiles.active=test`（或 `SPRING_PROFILES_ACTIVE=test`），**禁止沿用默认 `local`**。详见 `../../zhibo-shared/docs/Spring环境与启动.md`。
+
 - SSH：`ssh ubuntu@14.103.210.83`（当前密码登录；有密钥后再关密码）
 - 系统：Ubuntu 26.04 64 位（火山云）
 - 站点：

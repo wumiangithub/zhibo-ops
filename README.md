@@ -18,6 +18,8 @@
 - **uat**：`ubuntu@14.103.46.159`（占位）
 - **prod**：机器待定（占位）
 
+**Spring profile（强制）**：测试 / 预发 / 生产拉起 Java 时必须分别带 `--spring.profiles.active=test|uat|prod`（或 `SPRING_PROFILES_ACTIVE` 同值）。默认是 `local`，只给本机开发用。**禁止沿用默认 `local`**，否则生产也会走模拟扫码登录。详见 `../zhibo-shared/docs/Spring环境与启动.md`。
+
 当前范围：test/uat 上**后端 Java 已由后端自行部署**；本仓先部署 `admin-web` / `live-web`；后端暂不由本仓发布。
 
 本目录是独立 git 仓，默认分支 `master`，远程 `git@github.com:wumiangithub/zhibo-ops.git`。父目录不要 `git init`。

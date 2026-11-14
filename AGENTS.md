@@ -17,6 +17,10 @@ Grok bot **打开父目录** `D:\ai-project\zhibo`（`zhibo-ops` 和各子仓都
 - 不写业务代码：不改 Java、Vue、小程序业务逻辑，不改 API 契约，不派业务功能工单。
 - 本窗口不是副总控，禁止使用 `[lead-grok]`、`[lead]`、`[lead-codex]`、`[lead-cloud]`。
 
+## Spring 环境与启动（强制）
+
+发布或拉起测试 / 预发 / 生产的 Java 时，必须分别带 `--spring.profiles.active=test|uat|prod`（或 `SPRING_PROFILES_ACTIVE` 同值）。默认 profile 是 `local`，只给本机开发用。**禁止在测试、预发、生产沿用默认 `local`**，否则会加载本地配置，管理端登录会模拟扫码通过。环境名是 `prod`，不要写 `production`。详见 `../zhibo-shared/docs/Spring环境与启动.md`。
+
 ## 提交
 
 前缀固定 `[ops-grok]`。须用户明确要求才 `git commit` / `git push`。
